@@ -5,6 +5,7 @@ import com.codecool.krk.dao.Iguestbook;
 import com.codecool.krk.dao.sql.ConnectionPool;
 import com.codecool.krk.dao.sql.Guestbook;
 import com.codecool.krk.dao.sql.IConnectionPool;
+import com.codecool.krk.server.GuestbookServer;
 
 import java.sql.SQLException;
 
@@ -24,7 +25,8 @@ public class App {
 
         Iguestbook guestbookDAO = new Guestbook(connectionPool);
 
-        Controller controller = new Controller();
+        GuestbookServer server = new GuestbookServer();
+        Controller controller = new Controller(server);
         controller.run();
     }
 }
