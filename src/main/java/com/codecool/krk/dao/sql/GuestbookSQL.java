@@ -7,16 +7,16 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Guestbook implements Iguestbook {
+public class GuestbookSQL implements Iguestbook {
     private IConnectionPool connectionPool;
 
-    public Guestbook(IConnectionPool connectionPool) {
+    public GuestbookSQL(IConnectionPool connectionPool) {
         this.connectionPool = connectionPool;
     }
 
     @Override
     public void addEntryToGuestbook(String name, String message) {
-        String query = "INSERT INTO questbook (name, message, date) " +
+        String query = "INSERT INTO guestbook_entries (name, message, date) " +
                 "VALUES (?, ?, ?)";
 
         try {
@@ -24,9 +24,7 @@ public class Guestbook implements Iguestbook {
             insertQuestData(query, connection, name, message);
             connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage()
-                    + "\nSQLState: " + e.getSQLState()
-                    + "\nVendorError: " + e.getErrorCode());
+            System.err.println("SQLInsertException: " + e.getMessage());
         }
     }
 
@@ -43,16 +41,14 @@ public class Guestbook implements Iguestbook {
     @Override
     public List<GuestbookEntry> getAllEntries() {
         List<GuestbookEntry> listOfEntries = new ArrayList<>();
-        String query = "SELECT * FROM guestbook";
+        String query = "SELECT * FROM guestbook_entries ORDER BY id DESC";
 
         try {
             Connection connection = connectionPool.getConnection();
             prepareEntriesList(listOfEntries, query, connection);
             connectionPool.releaseConnection(connection);
         } catch (SQLException e) {
-            System.err.println("SQLException: " + e.getMessage()
-                    + "\nSQLState: " + e.getSQLState()
-                    + "\nVendorError: " + e.getErrorCode());
+            System.err.println("SQLSelectException: " + e.getMessage());
         }
 
 

@@ -3,7 +3,7 @@ package com.codecool.krk;
 import com.codecool.krk.controller.Controller;
 import com.codecool.krk.dao.Iguestbook;
 import com.codecool.krk.dao.sql.ConnectionPool;
-import com.codecool.krk.dao.sql.Guestbook;
+import com.codecool.krk.dao.sql.GuestbookSQL;
 import com.codecool.krk.dao.sql.IConnectionPool;
 import com.codecool.krk.server.GuestbookServer;
 
@@ -23,9 +23,9 @@ public class App {
             e.printStackTrace();
         }
 
-        Iguestbook guestbookDAO = new Guestbook(connectionPool);
+        Iguestbook guestbookDAO = new GuestbookSQL(connectionPool);
 
-        GuestbookServer server = new GuestbookServer();
+        GuestbookServer server = new GuestbookServer(guestbookDAO);
         Controller controller = new Controller(server);
         controller.run();
     }
